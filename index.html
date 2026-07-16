@@ -1,0 +1,448 @@
+<style>
+  :root {
+    --bg: #ffffff;
+    --surface: #f7fafd;
+    --surface-2: #e6eaf0;
+    --ink: #1b1f23;
+    --ink-soft: #5e6c84;
+    --muted: #7a869a;
+    --line: #e1e4e8;
+    --line-strong: #cfd8dc;
+    --accent: #2564ae;
+    --accent-soft: #e6f0fa;
+    --accent-ink: #174ea6;
+    --data: #106ebe;
+    --data-soft: #c7e0f4;
+    --good: #4caf50;
+    --shadow: 0 1px 2px rgba(27,31,35,.05), 0 8px 24px -12px rgba(27,31,35,.18);
+    --sans: system-ui, -apple-system, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "YuGothic", "Meiryo", sans-serif;
+    --serif: "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", "Noto Serif JP", serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #17130F;
+      --surface: #211B16;
+      --surface-2: #2A231C;
+      --ink: #F1EBE3;
+      --ink-soft: #CFC6BB;
+      --muted: #9A8F83;
+      --line: #362D24;
+      --line-strong: #453A2E;
+      --accent: #E08A63;
+      --accent-soft: #3A2519;
+      --accent-ink: #F0B698;
+      --data: #7FA9B4;
+      --data-soft: #22333A;
+      --good: #8FB98C;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 30px -14px rgba(0,0,0,.55);
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #FAF8F5; --surface: #FFFFFF; --surface-2: #F3EFE9; --ink: #201B17;
+    --ink-soft: #4A423B; --muted: #7C7169; --line: #E7E0D6; --line-strong: #D8CFC2;
+    --accent: #C15F3C; --accent-soft: #F0D9CE; --accent-ink: #97431F; --data: #3E6470;
+    --data-soft: #D6E2E5; --good: #4E7A4B; --shadow: 0 1px 2px rgba(32,27,23,.05), 0 8px 24px -12px rgba(32,27,23,.18);
+  }
+  :root[data-theme="dark"] {
+    --bg: #17130F; --surface: #211B16; --surface-2: #2A231C; --ink: #F1EBE3;
+    --ink-soft: #CFC6BB; --muted: #9A8F83; --line: #362D24; --line-strong: #453A2E;
+    --accent: #E08A63; --accent-soft: #3A2519; --accent-ink: #F0B698; --data: #7FA9B4;
+    --data-soft: #22333A; --good: #8FB98C; --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 30px -14px rgba(0,0,0,.55);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    line-height: 1.75;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 0 24px 96px; }
+  .doc { display: flex; flex-direction: column; gap: 56px; }
+
+  h1, h2, h3 { text-wrap: balance; line-height: 1.3; }
+  p { margin: 0; }
+  strong { font-weight: 700; }
+  .num { font-variant-numeric: tabular-nums; }
+
+  /* ---- Cover ---- */
+  .cover {
+    padding: 72px 0 48px;
+    border-bottom: 1px solid var(--line);
+  }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-size: 12px; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--accent-ink); font-weight: 700;
+  }
+  .eyebrow::before {
+    content: ""; width: 26px; height: 2px; background: var(--accent); display: inline-block;
+  }
+  .cover h1 {
+    margin: 20px 0 0; font-size: 42px; font-weight: 800; letter-spacing: -.01em;
+  }
+  .cover .lede {
+    margin-top: 18px; font-size: 18px; color: var(--ink-soft); max-width: 34em;
+  }
+  .cover .meta {
+    margin-top: 32px; display: flex; flex-wrap: wrap; gap: 8px 28px;
+    font-size: 13px; color: var(--muted);
+  }
+  .cover .meta b { color: var(--ink-soft); font-weight: 600; }
+
+  /* ---- Section ---- */
+  section { scroll-margin-top: 24px; }
+  .sec-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 22px; }
+  .sec-no {
+    font-family: var(--serif); font-size: 15px; color: var(--accent);
+    font-weight: 700; letter-spacing: .04em;
+  }
+  .sec-head h2 { margin: 0; font-size: 25px; font-weight: 800; letter-spacing: -.01em; }
+  .sec-sub { color: var(--muted); font-size: 14px; margin-top: -12px; margin-bottom: 22px; }
+
+  /* ---- Cards ---- */
+  .grid { display: grid; gap: 16px; }
+  .g2 { grid-template-columns: repeat(2, 1fr); }
+  .g3 { grid-template-columns: repeat(3, 1fr); }
+  .card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+    padding: 22px; box-shadow: var(--shadow);
+  }
+  .card h3 { margin: 0 0 8px; font-size: 16px; font-weight: 700; }
+  .card p { color: var(--ink-soft); font-size: 14.5px; }
+
+  /* ---- Highlight price block ---- */
+  .price-hero {
+    background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    border: 1px solid var(--line-strong); border-radius: 16px; padding: 30px 32px;
+    display: grid; grid-template-columns: 1.1fr 1fr; gap: 12px 40px; align-items: center;
+    box-shadow: var(--shadow);
+  }
+  .price-hero .plan-tag {
+    display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: .05em;
+    color: var(--accent-ink); background: var(--accent-soft); padding: 4px 11px; border-radius: 100px;
+  }
+  .price-hero h3 { margin: 12px 0 4px; font-size: 22px; font-weight: 800; }
+  .price-hero .desc { color: var(--ink-soft); font-size: 14px; }
+  .price-figure { text-align: right; }
+  .price-figure .big { font-size: 48px; font-weight: 800; letter-spacing: -.02em; line-height: 1; }
+  .price-figure .unit { font-size: 15px; color: var(--muted); font-weight: 600; }
+  .price-figure .alt { font-size: 13px; color: var(--muted); margin-top: 8px; }
+
+  /* ---- Tables ---- */
+  .table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; min-width: 560px; background: var(--surface); }
+  thead th {
+    text-align: left; padding: 14px 16px; font-weight: 700; font-size: 12.5px;
+    letter-spacing: .03em; color: var(--ink-soft); background: var(--surface-2);
+    border-bottom: 1px solid var(--line-strong); white-space: nowrap;
+  }
+  thead th.hl { color: var(--accent-ink); }
+  tbody td { padding: 13px 16px; border-bottom: 1px solid var(--line); color: var(--ink-soft); vertical-align: middle; }
+  tbody tr:last-child td { border-bottom: none; }
+  td.rowhead { color: var(--ink); font-weight: 600; white-space: nowrap; }
+  col.hl, td.hl { background: color-mix(in srgb, var(--accent-soft) 55%, transparent); }
+  .num-cell { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .yes { color: var(--good); font-weight: 700; }
+  .no { color: var(--muted); }
+  .cap { color: var(--muted); font-size: 12px; }
+
+  /* ---- Cost estimate ---- */
+  .est-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .est {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+    padding: 22px; box-shadow: var(--shadow); position: relative; overflow: hidden;
+  }
+  .est.feat { border-color: var(--accent); }
+  .est.feat::before {
+    content: "推奨"; position: absolute; top: 14px; right: -30px; transform: rotate(45deg);
+    background: var(--accent); color: #fff; font-size: 11px; font-weight: 700;
+    padding: 3px 34px; letter-spacing: .05em;
+  }
+  .est .seats { font-size: 13px; color: var(--muted); font-weight: 600; }
+  .est .mo { font-size: 30px; font-weight: 800; margin-top: 4px; letter-spacing: -.01em; }
+  .est .mo small { font-size: 14px; color: var(--muted); font-weight: 600; }
+  .est .yr { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--line-strong); font-size: 13.5px; color: var(--ink-soft); }
+  .est .jpy { color: var(--muted); font-size: 12.5px; margin-top: 6px; }
+
+  /* ---- Bar chart ---- */
+  .bars { display: flex; flex-direction: column; gap: 12px; margin-top: 6px; }
+  .bar-row { display: grid; grid-template-columns: 130px 1fr auto; align-items: center; gap: 14px; font-size: 13.5px; }
+  .bar-row .lbl { color: var(--ink-soft); font-weight: 600; }
+  .bar-track { background: var(--surface-2); border-radius: 6px; height: 22px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 6px; background: var(--data); }
+  .bar-fill.accent { background: var(--accent); }
+  .bar-row .val { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--ink); min-width: 56px; text-align: right; }
+
+  /* ---- Callout ---- */
+  .callout {
+    display: flex; gap: 16px; background: var(--accent-soft); border: 1px solid transparent;
+    border-radius: 12px; padding: 20px 22px;
+  }
+  .callout .mark { color: var(--accent-ink); font-family: var(--serif); font-size: 26px; line-height: 1; font-weight: 700; }
+  .callout p { color: var(--accent-ink); font-size: 14.5px; }
+  .callout b { color: var(--accent-ink); }
+
+  /* ---- Use cases ---- */
+  .uc { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .uc-item { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; box-shadow: var(--shadow); }
+  .uc-item .role { font-size: 12px; letter-spacing: .04em; color: var(--accent-ink); font-weight: 700; text-transform: uppercase; }
+  .uc-item h3 { margin: 6px 0 6px; font-size: 15.5px; }
+  .uc-item p { color: var(--ink-soft); font-size: 13.5px; }
+
+  /* ---- Steps ---- */
+  .steps { display: flex; flex-direction: column; gap: 2px; }
+  .step { display: grid; grid-template-columns: 40px 1fr; gap: 18px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .step:last-child { border-bottom: none; }
+  .step .n {
+    width: 34px; height: 34px; border-radius: 50%; background: var(--surface-2);
+    border: 1px solid var(--line-strong); color: var(--accent-ink); font-weight: 800;
+    display: flex; align-items: center; justify-content: center; font-size: 15px; font-variant-numeric: tabular-nums;
+  }
+  .step h3 { margin: 4px 0 4px; font-size: 15.5px; }
+  .step p { color: var(--ink-soft); font-size: 13.5px; }
+
+  /* ---- Recommendation banner ---- */
+  .rec {
+    background: var(--ink); color: var(--bg); border-radius: 16px; padding: 34px 34px;
+  }
+  .rec .eyebrow { color: var(--accent); }
+  .rec .eyebrow::before { background: var(--accent); }
+  .rec h2 { margin: 16px 0 10px; font-size: 24px; color: var(--surface); font-weight: 800; }
+  :root[data-theme="dark"] .rec h2, .rec h2 { color: #FDFBF8; }
+  .rec p { color: color-mix(in srgb, var(--bg) 82%, var(--muted)); font-size: 15px; max-width: 46em; }
+  :root[data-theme="dark"] .rec { background: #0E0B08; }
+
+  /* ---- Footnotes ---- */
+  .notes { border-top: 1px solid var(--line); padding-top: 24px; font-size: 12.5px; color: var(--muted); }
+  .notes h3 { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); margin: 0 0 12px; }
+  .notes ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 7px; }
+  .notes a { color: var(--accent-ink); text-decoration: none; border-bottom: 1px solid var(--accent-soft); }
+  .notes a:hover { border-bottom-color: var(--accent); }
+
+  a:focus-visible, .est:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+
+  @media (max-width: 720px) {
+    .cover h1 { font-size: 32px; }
+    .price-hero { grid-template-columns: 1fr; }
+    .price-figure { text-align: left; }
+    .g2, .g3, .est-grid, .uc { grid-template-columns: 1fr; }
+    .bar-row { grid-template-columns: 96px 1fr auto; }
+    .wrap { padding: 0 18px 72px; }
+  }
+</style>
+
+<div class="wrap">
+  <div class="doc">
+
+    <!-- COVER -->
+    <header class="cover">
+      <span class="eyebrow">社内導入提案書</span>
+      <h1>Claude Team プラン（Standard シート）導入のご提案</h1>
+      <p class="lede">生成 AI「Claude」をチーム単位で安全に活用するための、料金・コスト試算・セキュリティ・運用をまとめた稟議用資料です。</p>
+      <div class="meta">
+        <span><b>対象プラン</b>　Team / Standard シート（年払い）</span>
+        <span><b>想定規模</b>　5〜10 名</span>
+        <span><b>作成日</b>　2026年7月13日</span>
+      </div>
+    </header>
+
+    <!-- 1. SUMMARY -->
+    <section>
+      <div class="sec-head"><span class="sec-no">01</span><h2>エグゼクティブサマリー</h2></div>
+      <div class="grid g3">
+        <div class="card">
+          <h3>少額で「チーム基盤」に</h3>
+          <p>個人版 Pro（年払い <span class="num">$17</span>/月）に対し、Team Standard は年払い <strong class="num">$20</strong>/席・月。1 席あたり月 <strong class="num">+$3</strong> の差で、一元管理・SSO・管理コンソールといった組織機能が揃います。</p>
+        </div>
+        <div class="card">
+          <h3>データは学習に不使用</h3>
+          <p>Team プランでは既定で<strong>お客様のコンテンツをモデル学習に使用しません</strong>。SSO・ドメインキャプチャ・役割ベース権限で、全社利用に必要なガバナンスを確保できます。</p>
+        </div>
+        <div class="card">
+          <h3>1 契約で全機能</h3>
+          <p>チャットに加え <strong>Claude Code</strong>・プロジェクト・エンタープライズ検索・Microsoft 365 / Slack 連携までを、部署横断で 1 つの請求にまとめられます。</p>
+        </div>
+      </div>
+      <div class="callout" style="margin-top:16px">
+        <span class="mark">＂</span>
+        <p><b>結論：</b>5〜10 名規模での AI 活用の第一歩として、年払いの Team Standard（<span class="num">$20</span>/席・月）を推奨します。個人契約を各自バラバラに持つより、コスト・セキュリティ・管理のいずれでも優位です。</p>
+      </div>
+    </section>
+
+    <!-- 2. PRICING -->
+    <section>
+      <div class="sec-head"><span class="sec-no">02</span><h2>料金体系</h2></div>
+      <p class="sec-sub">Team プランには Standard / Premium の 2 種類のシートがあります。本提案は Standard シートを前提とします。</p>
+
+      <div class="price-hero">
+        <div>
+          <span class="plan-tag">TEAM ・ STANDARD シート</span>
+          <h3>Standard シート</h3>
+          <p class="desc">Pro の全機能に加え、より多い利用枠とチーム向け管理機能。最低 5 席から、最大 150 席まで。</p>
+        </div>
+        <div class="price-figure">
+          <div><span class="big num">$20</span> <span class="unit">/ 席・月</span></div>
+          <div class="alt">年払い時。月払いは <span class="num">$25</span> / 席・月</div>
+          <div class="alt">＝ 年額 <strong class="num">$240</strong> / 席（参考 ≈ ¥37,200）</div>
+        </div>
+      </div>
+
+      <div class="grid g3" style="margin-top:16px">
+        <div class="card">
+          <h3>利用枠（使用量）</h3>
+          <p>1 セッションあたり Pro の <strong>約 1.25 倍</strong>。全モデル共通の週次上限が席ごとに適用され、上限到達後も<strong>従量クレジットの前払い</strong>で継続利用が可能です。</p>
+        </div>
+        <div class="card">
+          <h3>含まれる主な機能</h3>
+          <p>Claude Code / プロジェクト / エンタープライズ検索 / Microsoft 365・Slack 連携 / 管理コンソール / SSO / エンタープライズ版デスクトップ配布。</p>
+        </div>
+        <div class="card">
+          <h3>契約条件</h3>
+          <p>最低 <strong>5 席</strong>・最大 <strong>150 席</strong>。年払いで単価が割安（月払い比 <span class="num">-20%</span>）。席数は途中追加が可能です。</p>
+        </div>
+      </div>
+
+      <div class="callout" style="margin-top:16px">
+        <span class="mark">！</span>
+        <p><b>ヘビーな Claude Code 利用を見込む場合：</b>Standard の上限では不足する開発者向けに、利用枠が Pro 比 <span class="num">6.25</span> 倍の <b>Premium シート</b>（年払い <span class="num">$100</span>/席・月）が用意されています。まず Standard で開始し、必要な人数分のみ Premium へ切り替える運用が現実的です。</p>
+      </div>
+    </section>
+
+    <!-- 3. COST ESTIMATE -->
+    <section>
+      <div class="sec-head"><span class="sec-no">03</span><h2>コスト試算（年払い・Standard）</h2></div>
+      <p class="sec-sub">Standard シート 年払い <span class="num">$20</span>/席・月 で試算。¥ は参考換算（想定レート <span class="num">1 USD = ¥155</span>）。</p>
+
+      <div class="est-grid">
+        <div class="est">
+          <div class="seats">5 席（最小構成）</div>
+          <div class="mo"><span class="num">$100</span> <small>/ 月</small></div>
+          <div class="yr">年額 <strong class="num">$1,200</strong></div>
+          <div class="jpy num">≈ ¥15,500 / 月 ・ ¥186,000 / 年</div>
+        </div>
+        <div class="est feat">
+          <div class="seats">7 席</div>
+          <div class="mo"><span class="num">$140</span> <small>/ 月</small></div>
+          <div class="yr">年額 <strong class="num">$1,680</strong></div>
+          <div class="jpy num">≈ ¥21,700 / 月 ・ ¥260,400 / 年</div>
+        </div>
+        <div class="est">
+          <div class="seats">10 席</div>
+          <div class="mo"><span class="num">$200</span> <small>/ 月</small></div>
+          <div class="yr">年額 <strong class="num">$2,400</strong></div>
+          <div class="jpy num">≈ ¥31,000 / 月 ・ ¥372,000 / 年</div>
+        </div>
+      </div>
+
+      <h3 style="font-size:15px;margin:28px 0 6px;color:var(--ink-soft)">プラン別 月額単価の比較（1 席あたり・年払い）</h3>
+      <div class="bars">
+        <div class="bar-row"><span class="lbl">Free</span><div class="bar-track"><div class="bar-fill" style="width:2%"></div></div><span class="val">$0</span></div>
+        <div class="bar-row"><span class="lbl">Pro（個人）</span><div class="bar-track"><div class="bar-fill" style="width:17%"></div></div><span class="val">$17</span></div>
+        <div class="bar-row"><span class="lbl">Team Standard</span><div class="bar-track"><div class="bar-fill accent" style="width:20%"></div></div><span class="val">$20</span></div>
+        <div class="bar-row"><span class="lbl">Team Premium</span><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><span class="val">$100</span></div>
+        <div class="bar-row"><span class="lbl">Max（個人）</span><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><span class="val">$100〜</span></div>
+      </div>
+      <p class="cap" style="margin-top:12px">※ Team は席単位・最低 5 席。Pro / Max は個人契約で管理機能なし。個人 Pro を 7 名分揃えると月 <span class="num">$119</span> かかる一方、管理・SSO・一元請求は付きません。Team Standard なら月 <span class="num">$140</span>（＋<span class="num">$21</span>）で組織機能まで含まれます。</p>
+    </section>
+
+    <!-- 4. SECURITY -->
+    <section>
+      <div class="sec-head"><span class="sec-no">04</span><h2>セキュリティ・管理機能</h2></div>
+      <p class="sec-sub">全社導入で問われる「データ保護」と「統制」を、Standard シートの標準機能でカバーできます。</p>
+      <div class="grid g2">
+        <div class="card"><h3>学習への不使用（既定）</h3><p>Team プランでは、既定でお客様の会話・データをモデルの学習に使用しません。業務情報を安心して入力できます。</p></div>
+        <div class="card"><h3>SSO・ドメインキャプチャ</h3><p>シングルサインオンと、自社ドメインのアカウントを組織に集約するドメインキャプチャに対応。認証を情シス管理下に置けます。</p></div>
+        <div class="card"><h3>役割ベースの権限管理</h3><p>管理者・メンバーなどの役割に応じてアクセス範囲を制御。JIT プロビジョニングでアカウント発行も効率化します。</p></div>
+        <div class="card"><h3>一元請求・支出上限</h3><p>請求を 1 本化し、組織・個人単位で支出上限（スペンドコントロール）を設定。予算超過を防げます。</p></div>
+        <div class="card"><h3>管理コンソール</h3><p>メンバー招待・席の増減・利用状況の把握、リモート／ローカルのコネクタ管理を一元的に運用できます。</p></div>
+        <div class="card"><h3>エンタープライズ版デスクトップ配布</h3><p>組織向けのデスクトップアプリ配布に対応。全社への展開・標準化が容易です。</p></div>
+      </div>
+    </section>
+
+    <!-- 5. USE CASES -->
+    <section>
+      <div class="sec-head"><span class="sec-no">05</span><h2>活用ユースケース</h2></div>
+      <p class="sec-sub">5〜10 名の少人数チームでも、日常業務の各所で効果が見込めます。</p>
+      <div class="uc">
+        <div class="uc-item"><span class="role">開発</span><h3>Claude Code によるコーディング支援</h3><p>実装・リファクタ・レビュー・不具合調査をターミナルから支援。定型実装や調査の時間を短縮します。</p></div>
+        <div class="uc-item"><span class="role">営業・企画</span><h3>提案書・資料のドラフト作成</h3><p>要点メモから提案骨子や比較表を素早く生成。本資料のような社内文書の下書きにも活用できます。</p></div>
+        <div class="uc-item"><span class="role">バックオフィス</span><h3>議事録・メール・要約</h3><p>長文の要約、メール文面、議事録整形など反復業務を巻き取り、確認・判断に時間を回せます。</p></div>
+        <div class="uc-item"><span class="role">全社</span><h3>エンタープライズ検索・社内ナレッジ</h3><p>Google Drive・Microsoft 365・Slack・GitHub 等と連携し、社内情報を横断的に参照・要約できます。</p></div>
+      </div>
+    </section>
+
+    <!-- 6. COMPARISON -->
+    <section>
+      <div class="sec-head"><span class="sec-no">06</span><h2>他プランとの比較</h2></div>
+      <p class="sec-sub">価格は原則 1 席（1 名）あたり月額（Team／Pro は年払い時、Max は月払いのみ）。✓ は標準搭載を示します。</p>
+      <div class="table-scroll">
+        <table>
+          <colgroup><col><col><col><col class="hl"><col><col></colgroup>
+          <thead>
+            <tr>
+              <th>項目</th>
+              <th>Pro（個人）</th>
+              <th>Max（個人）</th>
+              <th class="hl">Team Standard</th>
+              <th>Team Premium</th>
+              <th>Enterprise</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="rowhead">月額（席・月）</td><td class="num-cell">$17</td><td class="num-cell">$100〜（5x）／$200〜（20x）</td><td class="hl num-cell"><strong>$20</strong></td><td class="num-cell">$100</td><td class="num-cell">要問合せ</td></tr>
+            <tr><td class="rowhead">セッション利用枠</td><td>1×（基準）</td><td>5× または 20×</td><td class="hl">約 1.25×</td><td>約 6.25×</td><td>カスタム</td></tr>
+            <tr><td class="rowhead">最低契約数</td><td class="num-cell">1（個人）</td><td class="num-cell">1（個人）</td><td class="hl num-cell">5 席</td><td class="num-cell">5 席</td><td>カスタム</td></tr>
+            <tr><td class="rowhead">年払い割引</td><td class="yes">✓</td><td class="no">—（月払いのみ）</td><td class="hl yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+            <tr><td class="rowhead">Claude Code</td><td class="yes">✓</td><td class="yes">✓</td><td class="hl yes">✓</td><td class="yes">✓（大容量）</td><td class="yes">✓</td></tr>
+            <tr><td class="rowhead">一元請求・管理コンソール</td><td class="no">—</td><td class="no">—</td><td class="hl yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+            <tr><td class="rowhead">SSO・ドメインキャプチャ</td><td class="no">—</td><td class="no">—</td><td class="hl yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+            <tr><td class="rowhead">役割ベース権限・支出上限</td><td class="no">—</td><td class="no">—</td><td class="hl yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+            <tr><td class="rowhead">エンタープライズ検索・連携</td><td class="no">—</td><td class="no">—</td><td class="hl yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+            <tr><td class="rowhead">学習利用の既定設定</td><td class="no">既定オン（オプトアウト可）</td><td class="no">既定オン（オプトアウト可）</td><td class="hl yes">既定オフ（不使用）</td><td class="yes">既定オフ（不使用）</td><td class="yes">既定オフ（不使用）</td></tr>
+            <tr><td class="rowhead">SCIM・監査ログ</td><td class="no">—</td><td class="no">—</td><td class="hl no">—</td><td class="no">—</td><td class="yes">✓</td></tr>
+            <tr><td class="rowhead">HIPAA 対応オプション</td><td class="no">—</td><td class="no">—</td><td class="hl no">—</td><td class="no">—</td><td class="yes">✓</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="cap" style="margin-top:12px">※ Max（個人）は Pro 同様に組織向け管理機能（SSO・一元請求・エンタープライズ検索など）を持たない個人契約です。ヘビーユーザー向けの上位互換に見えますが、管理・ガバナンス面では Team Standard が優位です。監査ログ・SCIM・HIPAA など高度なコンプライアンス要件が必須の場合は Enterprise が選択肢となります。5〜10 名規模では Team Standard が費用対効果に優れます。</p>
+      <p class="cap" style="margin-top:8px">※ 2025年8月の規約改定により、Free／Pro／Max の個人向けプランは「学習利用が既定でオン、設定でオプトアウト可能」という扱いに変更されています（従来は不使用が既定）。Team／Enterprise は引き続き既定で学習に使用しません。本表はこの点を反映しています。</p>
+    </section>
+
+    <!-- 7. STEPS -->
+    <section>
+      <div class="sec-head"><span class="sec-no">07</span><h2>導入ステップ</h2></div>
+      <div class="steps">
+        <div class="step"><div class="n">1</div><div><h3>席数の確定（5〜10 席）</h3><p>初期利用メンバーを決め、最低 5 席から開始。年払いを選択して単価を最適化します。</p></div></div>
+        <div class="step"><div class="n">2</div><div><h3>組織セットアップ</h3><p>管理者を任命し、SSO・ドメインキャプチャ・役割・支出上限を設定。情シスのガバナンス下に置きます。</p></div></div>
+        <div class="step"><div class="n">3</div><div><h3>メンバー招待・オンボーディング</h3><p>アカウントを発行し、Claude Code・連携ツールを含む基本的な使い方を共有します。</p></div></div>
+        <div class="step"><div class="n">4</div><div><h3>試験運用と効果測定（1〜2 か月）</h3><p>利用状況をコンソールで確認。ヘビーユーザーには Premium 席への切替、席の増減を検討します。</p></div></div>
+      </div>
+    </section>
+
+    <!-- REC -->
+    <section class="rec">
+      <span class="eyebrow">おすすめ構成</span>
+      <h2 style="color:#000000">年払い・Team Standard 7 席 ＝ 月 $140（年 $1,680）</h2>
+      <p>まず 5〜7 席の Standard でスモールスタートし、効果を測定。開発でヘビーに使うメンバーだけを後から Premium に切り替える運用が、コストとガバナンスのバランスに最も優れます。席数は途中で追加できるため、小さく始めて段階的に拡大できます。</p>
+    </section>
+
+    <!-- NOTES -->
+    <div class="notes">
+      <h3>出典・注記</h3>
+      <ul>
+        <li>料金・機能は Anthropic 公式ページに基づく（2026年7月16日時点）。最新の条件は契約時に必ずご確認ください。出典: <a href="https://claude.com/pricing">claude.com/pricing</a>／<a href="https://support.claude.com/en/articles/9266767-what-is-the-team-plan">Claude ヘルプセンター「Team プランとは」</a>／<a href="https://support.claude.com/en/articles/11049741-what-is-the-max-plan">Claude ヘルプセンター「Max プランとは」</a></li>
+        <li>価格は米ドル建て（Anthropic の請求は USD）。円換算は想定レート 1 USD = ¥155 での参考値であり、実際の請求額は為替・課税により変動します。</li>
+        <li>「利用枠 1.25×／6.25×」は Pro プランの 1 セッションあたり利用量を基準とした相対値で、上限はモデル・時期により変わる場合があります。Max の「5×／20×」も同様に Pro 基準の相対値です。</li>
+        <li>Team プランは最低 5 席・最大 150 席。5 席を超える大規模・高度なコンプライアンス要件がある場合は Enterprise プランをご検討ください。Max は個人契約のため、組織全体への一括導入には不向きです。</li>
+        <li>2025年8月の規約改定により、Free／Pro／Max の個人向けプランは「学習利用が既定でオン、設定でオプトアウト可能」に変更されました（Team／Enterprise は引き続き既定で不使用）。出典: <a href="https://www.anthropic.com/news/updates-to-our-consumer-terms">Anthropic「Updates to Consumer Terms and Privacy Policy」</a>／<a href="https://privacy.claude.com/en/articles/10023580-is-my-data-used-for-model-training">Anthropic Privacy Center</a></li>
+        <li>本資料は社内提案用の汎用テンプレートです。会社名・ロゴ・承認欄等は必要に応じて追記してください。</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
