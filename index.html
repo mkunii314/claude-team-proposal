@@ -160,29 +160,53 @@ body {
   tbody td { padding: 13px 16px; border-bottom: 1px solid var(--line); color: var(--ink-soft); vertical-align: middle; }
   tbody tr:last-child td { border-bottom: none; }
   td.rowhead { color: var(--ink); font-weight: 600; white-space: nowrap; }
+  table small { display: inline-block; margin-top: 2px; color: var(--muted); font-size: 11px; font-weight: 600; }
   col.hl, td.hl { background: color-mix(in srgb, var(--accent-soft) 55%, transparent); }
   .num-cell { font-variant-numeric: tabular-nums; white-space: nowrap; }
   .yes { color: var(--good); font-weight: 700; }
   .no { color: var(--muted); }
   .cap { color: var(--muted); font-size: 12px; }
 
-  /* ---- Cost estimate ---- */
-  .est-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-  .est {
+  /* ---- Seat calculator ---- */
+  .calc {
     background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
-    padding: 22px; box-shadow: var(--shadow); position: relative; overflow: hidden;
+    padding: 22px; box-shadow: var(--shadow);
   }
-  .est.feat { border-color: var(--accent); }
-  .est.feat::before {
-    content: "推奨"; position: absolute; top: 14px; right: -30px; transform: rotate(45deg);
-    background: var(--accent); color: #fff; font-size: 11px; font-weight: 700;
-    padding: 3px 34px; letter-spacing: .05em;
+  .calc-ctrls { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 22px; align-items: start; }
+  .ctl > label { display: block; font-size: 12px; font-weight: 700; letter-spacing: .04em; color: var(--muted); margin-bottom: 8px; }
+  .stepper { display: flex; align-items: center; gap: 8px; }
+  .stepper button {
+    width: 30px; height: 30px; flex: none; border-radius: 8px; cursor: pointer;
+    border: 1px solid var(--line-strong); background: var(--surface-2); color: var(--ink);
+    font-size: 16px; font-weight: 700; line-height: 1; font-family: inherit;
   }
-  .est .seats { font-size: 13px; color: var(--muted); font-weight: 600; }
-  .est .mo { font-size: 30px; font-weight: 800; margin-top: 4px; letter-spacing: -.01em; }
-  .est .mo small { font-size: 14px; color: var(--muted); font-weight: 600; }
-  .est .yr { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--line-strong); font-size: 13.5px; color: var(--ink-soft); }
-  .est .jpy { color: var(--muted); font-size: 12.5px; margin-top: 6px; }
+  .stepper button:hover { border-color: var(--accent); color: var(--accent); }
+  .stepper input {
+    width: 78px; padding: 6px 8px; border-radius: 8px; border: 1px solid var(--line-strong);
+    background: var(--bg); color: var(--ink); font: 700 18px/1.2 var(--sans);
+    font-variant-numeric: tabular-nums; text-align: right; -moz-appearance: textfield;
+  }
+  .stepper input::-webkit-outer-spin-button, .stepper input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .stepper .unit { font-size: 13px; color: var(--muted); font-weight: 600; }
+  input[type=range] { width: 100%; margin-top: 14px; accent-color: var(--accent); }
+  .scale { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .seg { display: flex; gap: 6px; }
+  .seg button {
+    flex: 1; padding: 8px 10px; border-radius: 8px; cursor: pointer; font-family: inherit;
+    border: 1px solid var(--line-strong); background: var(--surface-2); color: var(--ink-soft);
+    font-size: 12.5px; font-weight: 700; line-height: 1.35;
+  }
+  .seg button.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .calc-out { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 22px; }
+  .out { background: var(--surface-2); border-radius: 10px; padding: 16px 18px; }
+  .out .k { font-size: 12px; color: var(--muted); font-weight: 700; letter-spacing: .04em; }
+  .out .v { font-size: 28px; font-weight: 800; letter-spacing: -.01em; margin-top: 4px; font-variant-numeric: tabular-nums; }
+  .out .v small { font-size: 13px; color: var(--muted); font-weight: 600; }
+  .out.primary { background: var(--accent-soft); }
+  .out.primary .k, .out.primary .v { color: var(--accent-ink); }
+  .out .sub { margin-top: 6px; font-size: 12.5px; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+  .calc-note { margin-top: 16px; padding-top: 14px; border-top: 1px dashed var(--line-strong); font-size: 13px; color: var(--ink-soft); }
+  .calc-note b { color: var(--accent-ink); }
 
   /* ---- Bar chart ---- */
   .bars { display: flex; flex-direction: column; gap: 12px; margin-top: 6px; }
@@ -221,17 +245,6 @@ body {
   .step h3 { margin: 4px 0 4px; font-size: 15.5px; }
   .step p { color: var(--ink-soft); font-size: 13.5px; }
 
-  /* ---- Recommendation banner ---- */
-  .rec {
-    background: var(--ink); color: var(--bg); border-radius: 16px; padding: 34px 34px;
-  }
-  .rec .eyebrow { color: #FFFFFF; }
-  .rec .eyebrow::before { background: #FFFFFF; }
-  .rec h2 { margin: 16px 0 10px; font-size: 24px; color: var(--surface); font-weight: 800; }
-  :root[data-theme="dark"] .rec h2, .rec h2 { color: #FDFBF8; }
-  .rec p { color: color-mix(in srgb, var(--bg) 82%, var(--muted)); font-size: 15px; max-width: 46em; }
-  :root[data-theme="dark"] .rec { background: #0E0B08; }
-
   /* ---- Footnotes ---- */
   .notes { border-top: 1px solid var(--line); padding-top: 24px; font-size: 12.5px; color: var(--muted); }
   .notes h3 { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); margin: 0 0 12px; }
@@ -239,13 +252,15 @@ body {
   .notes a { color: var(--accent-ink); text-decoration: none; border-bottom: 1px solid var(--accent-soft); }
   .notes a:hover { border-bottom-color: var(--accent); }
 
-  a:focus-visible, .est:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+  a:focus-visible, .calc input:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
 
   @media (max-width: 720px) {
     .cover h1 { font-size: 32px; }
     .price-hero { grid-template-columns: 1fr; }
     .price-figure { text-align: left; }
-    .g2, .g3, .est-grid, .uc { grid-template-columns: 1fr; }
+    .g2, .g3, .uc { grid-template-columns: 1fr; }
+    .calc-ctrls { grid-template-columns: 1fr; gap: 18px; }
+    .calc-out { grid-template-columns: 1fr; }
     .bar-row { grid-template-columns: 96px 1fr auto; }
     .wrap { padding: 0 18px 72px; }
   }
@@ -333,7 +348,7 @@ body {
         <div>
           <span class="plan-tag">TEAM ・ STANDARD シート</span>
           <h3>Standard シート</h3>
-          <p class="desc">Pro の全機能に加え、より多い利用枠とチーム向け管理機能。最低 5 席から、最大 150 席まで。</p>
+          <p class="desc">Pro の全機能に加え、より多い利用枠とチーム向け管理機能。最低 2 席から、最大 150 席まで。</p>
         </div>
         <div class="price-figure">
           <div><span class="big num">$20</span> <span class="unit">/ 席・月</span></div>
@@ -353,7 +368,7 @@ body {
         </div>
         <div class="card">
           <h3>契約条件</h3>
-          <p>最低 <strong>5 席</strong>・最大 <strong>150 席</strong>。年払いで単価が割安（月払い比 <span class="num">-20%</span>）。席数は途中追加が可能です。</p>
+          <p>最低 <strong>2 席</strong>・最大 <strong>150 席</strong>。年払いで単価が割安（月払い比 <span class="num">-20%</span>）。年契約の<strong>途中でも 1 席単位で増席でき</strong>、残期間分が日割りで即時課金されます（減席は次回更新時から反映）。</p>
         </div>
       </div>
 
@@ -365,28 +380,57 @@ body {
 
     <!-- 3. COST ESTIMATE -->
     <section>
-      <div class="sec-head"><span class="sec-no">03</span><h2>コスト試算（年払い・Standard）</h2></div>
-      <p class="sec-sub">Standard シート 年払い <span class="num">$20</span>/席・月 で試算。¥ は参考換算（想定レート <span class="num">1 USD = ¥155</span>）。</p>
+      <div class="sec-head"><span class="sec-no">03</span><h2>コスト試算シミュレーター（Team Standard）</h2></div>
+      <p class="sec-sub">Team Standard シートのみで試算します。席数・支払い方法・想定為替レートを変更すると、金額がその場で再計算されます。¥ は参考換算です。</p>
 
-      <div class="est-grid">
-        <div class="est">
-          <div class="seats">5 席（最小構成）</div>
-          <div class="mo"><span class="num">$100</span> <small>/ 月</small></div>
-          <div class="yr">年額 <strong class="num">$1,200</strong></div>
-          <div class="jpy num">≈ ¥15,500 / 月 ・ ¥186,000 / 年</div>
+      <div class="calc">
+        <div class="calc-ctrls">
+          <div class="ctl">
+            <label for="seatNum">席数（Team Standard）</label>
+            <div class="stepper">
+              <button type="button" id="seatMinus" aria-label="席数を減らす">−</button>
+              <input id="seatNum" type="number" min="2" max="150" step="1" value="7" inputmode="numeric" aria-label="席数">
+              <span class="unit">席</span>
+              <button type="button" id="seatPlus" aria-label="席数を増やす">+</button>
+            </div>
+            <input id="seatRange" type="range" min="2" max="150" step="1" value="7" aria-label="席数スライダー">
+            <div class="scale"><span>2 席（最低）</span><span>150 席（上限）</span></div>
+          </div>
+          <div class="ctl">
+            <label>支払い方法</label>
+            <div class="seg" id="billSeg">
+              <button type="button" class="on" data-bill="year">年払い<br>$20 / 席・月</button>
+              <button type="button" data-bill="month">月払い<br>$25 / 席・月</button>
+            </div>
+          </div>
+          <div class="ctl">
+            <label for="fxRate">想定為替レート（1 USD）</label>
+            <div class="stepper">
+              <span class="unit">¥</span>
+              <input id="fxRate" type="number" min="80" max="300" step="1" value="155" inputmode="numeric" aria-label="想定為替レート">
+            </div>
+          </div>
         </div>
-        <div class="est feat">
-          <div class="seats">7 席</div>
-          <div class="mo"><span class="num">$140</span> <small>/ 月</small></div>
-          <div class="yr">年額 <strong class="num">$1,680</strong></div>
-          <div class="jpy num">≈ ¥21,700 / 月 ・ ¥260,400 / 年</div>
+
+        <div class="calc-out">
+          <div class="out primary">
+            <div class="k">月額</div>
+            <div class="v" id="outMoUsd">$140</div>
+            <div class="sub" id="outMoJpy">≈ ¥21,700</div>
+          </div>
+          <div class="out">
+            <div class="k">年額</div>
+            <div class="v" id="outYrUsd">$1,680</div>
+            <div class="sub" id="outYrJpy">≈ ¥260,400</div>
+          </div>
+          <div class="out">
+            <div class="k">1 席あたり月額</div>
+            <div class="v" id="outSeatUsd">$20</div>
+            <div class="sub" id="outSeatJpy">≈ ¥3,100</div>
+          </div>
         </div>
-        <div class="est">
-          <div class="seats">10 席</div>
-          <div class="mo"><span class="num">$200</span> <small>/ 月</small></div>
-          <div class="yr">年額 <strong class="num">$2,400</strong></div>
-          <div class="jpy num">≈ ¥31,000 / 月 ・ ¥372,000 / 年</div>
-        </div>
+
+        <p class="calc-note" id="calcNote"></p>
       </div>
 
       <h3 style="font-size:15px;margin:28px 0 6px;color:var(--ink-soft)">プラン別 月額単価の比較（1 席あたり・年払い）</h3>
@@ -397,7 +441,7 @@ body {
         <div class="bar-row"><span class="lbl">Team Premium</span><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><span class="val">$100</span></div>
         <div class="bar-row"><span class="lbl">Max（個人）</span><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><span class="val">$100〜</span></div>
       </div>
-      <p class="cap" style="margin-top:12px">※ Team は席単位・最低 5 席。Pro / Max は個人契約で管理機能なし。個人 Pro を 7 名分揃えると月 <span class="num">$119</span> かかる一方、管理・SSO・一元請求は付きません。Team Standard なら月 <span class="num">$140</span>（＋<span class="num">$21</span>）で組織機能まで含まれます。</p>
+      <p class="cap" style="margin-top:12px">※ Team は席単位・最低 2 席。Pro / Max は個人契約で管理機能なし。個人 Pro を <span class="num" id="capSeats">7</span> 名分揃えると月 <span class="num" id="capPro">$119</span> かかる一方、管理・SSO・一元請求は付きません。Team Standard なら月 <span class="num" id="capTeam">$140</span>（<span class="num" id="capDiff">＋$21</span>）で組織機能まで含まれます。</p>
     </section>
 
     <!-- 4. SECURITY -->
@@ -429,7 +473,7 @@ body {
     <!-- 6. COMPARISON -->
     <section>
       <div class="sec-head"><span class="sec-no">06</span><h2>他プランとの比較</h2></div>
-      <p class="sec-sub">価格は原則 1 席（1 名）あたり月額（Team／Pro は年払い時、Max は月払いのみ）。✓ は標準搭載を示します。</p>
+      <p class="sec-sub">価格は原則 1 席（1 名）あたり月額（Team／Pro は年払い時、Max は月払いのみ、Enterprise は年払いのみ）。✓ は標準搭載を示します。</p>
       <div class="table-scroll">
         <table>
           <colgroup><col><col><col><col class="hl"><col><col></colgroup>
@@ -444,54 +488,147 @@ body {
             </tr>
           </thead>
           <tbody>
-            <tr><td class="rowhead">月額（席・月）</td><td class="num-cell">$17</td><td class="num-cell">$100〜（5x）／$200〜（20x）</td><td class="hl num-cell"><strong>$20</strong></td><td class="num-cell">$100</td><td class="num-cell">要問合せ</td></tr>
-            <tr><td class="rowhead">セッション利用枠</td><td>1×（基準）</td><td>5× または 20×</td><td class="hl">約 1.25×</td><td>約 6.25×</td><td>カスタム</td></tr>
-            <tr><td class="rowhead">最低契約数</td><td class="num-cell">1（個人）</td><td class="num-cell">1（個人）</td><td class="hl num-cell">5 席</td><td class="num-cell">5 席</td><td>カスタム</td></tr>
-            <tr><td class="rowhead">年払い割引</td><td class="yes">✓</td><td class="no">—（月払いのみ）</td><td class="hl yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+            <tr><td class="rowhead">月額（席・月）</td><td class="num-cell">$17<br><small>月払い $20</small></td><td class="num-cell">$100〜（5x）／$200〜（20x）</td><td class="hl num-cell"><strong>$20</strong><br><small>月払い $25</small></td><td class="num-cell">$100<br><small>月払い $125</small></td><td class="num-cell">$20<br><small>＋ 利用量（API 従量）</small></td></tr>
+            <tr><td class="rowhead">セッション利用枠</td><td>1×（基準）</td><td>5× または 20×</td><td class="hl">約 1.25×</td><td>約 6.25×</td><td>利用量課金（枠の概念なし）</td></tr>
+            <tr><td class="rowhead">最低契約数</td><td class="num-cell">1（個人）</td><td class="num-cell">1（個人）</td><td class="hl num-cell">2 席</td><td class="num-cell">2 席</td><td>要問合せ</td></tr>
+            <tr><td class="rowhead">年払い割引</td><td class="yes">✓</td><td class="no">—（月払いのみ）</td><td class="hl yes">✓（月払い比 -20%）</td><td class="yes">✓（月払い比 -20%）</td><td class="no">—（年払いのみ）</td></tr>
             <tr><td class="rowhead">Claude Code</td><td class="yes">✓</td><td class="yes">✓</td><td class="hl yes">✓</td><td class="yes">✓（大容量）</td><td class="yes">✓</td></tr>
+            <tr><td class="rowhead">Cowork（協働ワークスペース）</td><td class="yes">✓</td><td class="yes">✓</td><td class="hl yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
             <tr><td class="rowhead">一元請求・管理コンソール</td><td class="no">—</td><td class="no">—</td><td class="hl yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
             <tr><td class="rowhead">SSO・ドメインキャプチャ</td><td class="no">—</td><td class="no">—</td><td class="hl yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+            <tr><td class="rowhead">SSO の方式</td><td class="no">—</td><td class="no">—</td><td class="hl">Google / Microsoft</td><td>Google / Microsoft</td><td class="yes">SAML 含む</td></tr>
+            <tr><td class="rowhead">ユーザー自動連携</td><td class="no">—</td><td class="no">—</td><td class="hl">JIT のみ（SCIM 不可）</td><td>JIT のみ（SCIM 不可）</td><td class="yes">JIT ＋ SCIM</td></tr>
             <tr><td class="rowhead">役割ベース権限・支出上限</td><td class="no">—</td><td class="no">—</td><td class="hl yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
             <tr><td class="rowhead">エンタープライズ検索・連携</td><td class="no">—</td><td class="no">—</td><td class="hl yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
-            <tr><td class="rowhead">学習利用の既定設定</td><td class="no">既定オン（オプトアウト可）</td><td class="no">既定オン（オプトアウト可）</td><td class="hl yes">既定オフ（不使用）</td><td class="yes">既定オフ（不使用）</td><td class="yes">既定オフ（不使用）</td></tr>
-            <tr><td class="rowhead">SCIM・監査ログ</td><td class="no">—</td><td class="no">—</td><td class="hl no">—</td><td class="no">—</td><td class="yes">✓</td></tr>
-            <tr><td class="rowhead">HIPAA 対応オプション</td><td class="no">—</td><td class="no">—</td><td class="hl no">—</td><td class="no">—</td><td class="yes">✓</td></tr>
+            <tr><td class="rowhead">学習利用の既定設定</td><td class="no">利用者本人の設定次第</td><td class="no">利用者本人の設定次第</td><td class="hl yes">既定オフ（不使用）</td><td class="yes">既定オフ（不使用）</td><td class="yes">既定オフ（不使用）</td></tr>
+            <tr><td class="rowhead">監査ログ・コンプライアンス API</td><td class="no">—</td><td class="no">—</td><td class="hl no">—</td><td class="no">—</td><td class="yes">✓</td></tr>
+            <tr><td class="rowhead">HIPAA 対応オプション</td><td class="no">—</td><td class="no">—</td><td class="hl no">—</td><td class="no">—</td><td class="yes">✓（BAA 締結）</td></tr>
           </tbody>
         </table>
       </div>
-      <p class="cap" style="margin-top:12px">※ Max（個人）は Pro 同様に組織向け管理機能（SSO・一元請求・エンタープライズ検索など）を持たない個人契約です。ヘビーユーザー向けの上位互換に見えますが、管理・ガバナンス面では Team Standard が優位です。監査ログ・SCIM・HIPAA など高度なコンプライアンス要件が必須の場合は Enterprise が選択肢となります。5〜10 名規模では Team Standard が費用対効果に優れます。</p>
-      <p class="cap" style="margin-top:8px">※ 2025年8月の規約改定により、Free／Pro／Max の個人向けプランは「学習利用が既定でオン、設定でオプトアウト可能」という扱いに変更されています（従来は不使用が既定）。Team／Enterprise は引き続き既定で学習に使用しません。本表はこの点を反映しています。</p>
+      <p class="cap" style="margin-top:12px">※ Max（個人）は Pro 同様に組織向け管理機能（SSO・一元請求・エンタープライズ検索など）を持たない個人契約です。ヘビーユーザー向けの上位互換に見えますが、管理・ガバナンス面では Team Standard が優位です。監査ログ・SCIM・HIPAA など高度なコンプライアンス要件が必須の場合は Enterprise が選択肢となります。</p>
+      <p class="cap" style="margin-top:8px">※ Enterprise は「席あたり定額＋利用量を API 従量で別途課金」という二部構成で、Team のような席ごとの利用枠はありません。利用量が読めない段階では総額が見積もりにくい一方、Team は席数だけで年額が確定します。</p>
+      <p class="cap" style="margin-top:8px">※ 個人向けプラン（Free／Pro／Max）の学習利用は<strong>利用者本人のプライバシー設定に依存</strong>し、会社側で一律に制御できません。Team／Enterprise は既定でお客様のコンテンツを学習に使用しない扱いで、これが個人契約の寄せ集めとの決定的な差になります。</p>
     </section>
 
     <!-- 7. STEPS -->
     <section>
       <div class="sec-head"><span class="sec-no">07</span><h2>導入ステップ</h2></div>
       <div class="steps">
-        <div class="step"><div class="n">1</div><div><h3>席数の確定（5〜10 席）</h3><p>利用メンバーを決め、最低 5 席から開始。年払いを選択して単価を最適化します。</p></div></div>
+        <div class="step"><div class="n">1</div><div><h3>席数の確定（5〜10 席）</h3><p>利用メンバーを決め、最低 2 席から契約可能。年払いを選択して単価を最適化します。</p></div></div>
         <div class="step"><div class="n">2</div><div><h3>組織セットアップ</h3><p>管理者を立て共通セキュリティのセットアップ・アカウント管理、支出上限を設定。</p></div></div>
         <div class="step"><div class="n">3</div><div><h3>メンバー招待・オンボーディング</h3><p>アカウントを発行し、Claude Code・連携ツールを含む基本的な使い方を共有します。</p></div></div>
         <div class="step"><div class="n">4</div><div><h3>試験運用と効果測定（1〜2 か月）</h3><p>利用状況をコンソールで確認。ヘビーユーザーには Premium 席への切替、席の増減を検討します。</p></div></div>
       </div>
     </section>
 
-    <!-- REC -->
-    <section class="rec">
-      <span class="eyebrow">おすすめ構成</span>
-      <h2 style="color:#FFFFFF">年払い・Team Standard 7 席 ＝ 月 $140（年 $1,680）</h2>
-      <p>まず 5〜7 席の Standard でスモールスタートし、効果を測定。開発でヘビーに使うメンバーだけを後から Premium に切り替える運用が、コストとガバナンスのバランスに最も優れます。席数は途中で追加できるため、小さく始めて段階的に拡大できます。</p>
-    </section>
-
     <!-- NOTES -->
     <div class="notes">
       <h3>出典・注記</h3>
       <ul>
-        <li>料金・機能は Anthropic 公式ページに基づく（2026年7月16日時点）。最新の条件は契約時に必ずご確認ください。出典: <a href="https://claude.com/pricing">claude.com/pricing</a>／<a href="https://support.claude.com/en/articles/9266767-what-is-the-team-plan">Claude ヘルプセンター「Team プランとは」</a>／<a href="https://support.claude.com/en/articles/11049741-what-is-the-max-plan">Claude ヘルプセンター「Max プランとは」</a></li>
-        <li>価格は米ドル建て（Anthropic の請求は USD）。円換算は想定レート 1 USD = ¥155 での参考値であり、実際の請求額は為替・課税により変動します。</li>
+        <li>料金・機能は Anthropic 公式ページに基づく（2026年9月7日時点）。最新の条件は契約時に必ずご確認ください。出典: <a href="https://claude.com/pricing">claude.com/pricing</a>／<a href="https://support.claude.com/en/articles/9266767-what-is-the-team-plan">Claude ヘルプセンター「Team プランとは」</a>／<a href="https://support.claude.com/en/articles/11049741-what-is-the-max-plan">Claude ヘルプセンター「Max プランとは」</a></li>
+        <li>価格は米ドル建て（Anthropic の請求は USD）。円換算は想定レート 1 USD = ¥155（コスト試算シミュレーターで変更可）での参考値であり、実際の請求額は為替・課税により変動します。</li>
         <li>「利用枠 1.25×／6.25×」は Pro プランの 1 セッションあたり利用量を基準とした相対値で、上限はモデル・時期により変わる場合があります。Max の「5×／20×」も同様に Pro 基準の相対値です。</li>
-        <li>Team プランは最低 5 席・最大 150 席。5 席を超える大規模・高度なコンプライアンス要件がある場合は Enterprise プランをご検討ください。Max は個人契約のため、組織全体への一括導入には不向きです。</li>
-        <li>2025年8月の規約改定により、Free／Pro／Max の個人向けプランは「学習利用が既定でオン、設定でオプトアウト可能」に変更されました（Team／Enterprise は引き続き既定で不使用）。出典: <a href="https://www.anthropic.com/news/updates-to-our-consumer-terms">Anthropic「Updates to Consumer Terms and Privacy Policy」</a>／<a href="https://privacy.claude.com/en/articles/10023580-is-my-data-used-for-model-training">Anthropic Privacy Center</a></li>
+        <li>Team プランは最低 2 席・最大 150 席（2026年7月に最低席数が 5 席から 2 席へ引き下げ）。150 席を超える大規模・高度なコンプライアンス要件がある場合は Enterprise プランをご検討ください。Max は個人契約のため、組織全体への一括導入には不向きです。</li>
+        <li>増席は年契約の途中でも可能で、請求サイクルの残日数に応じた日割り額が即時課金されます。減席・席種のダウングレードは次回更新日から反映され、途中解約による返金・クレジットはありません。席の購入は Owner／Primary Owner のみが実行できます。出典: <a href="https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans">「Purchase and manage seats on Team plans」</a>／<a href="https://support.claude.com/en/articles/9267289-how-is-my-team-plan-bill-calculated">「How is my Team plan bill calculated?」</a></li>
+        <li>Anthropic API（Console）の利用は Claude のサブスクリプションに含まれず、別組織・別課金となります。Claude Code は Team Standard の席に含まれるため、API キーの従量課金なしで利用できます。出典: <a href="https://support.claude.com/en/articles/9876003-i-have-a-paid-claude-subscription-pro-max-team-or-enterprise-plans-why-do-i-have-to-pay-separately-to-use-the-claude-api-and-console">「Why do I have to pay separately to use the Claude API and Console?」</a></li>
+        <li>Enterprise は「席あたり定額（年払い）＋利用量を API 標準レートで別途課金」の二部構成。SCIM・監査ログ・コンプライアンス API・HIPAA 対応（BAA）は Enterprise のみの提供です。出典: <a href="https://support.claude.com/en/articles/11526368-how-am-i-billed-for-my-enterprise-plan">「How am I billed for my Enterprise plan?」</a>／<a href="https://support.claude.com/en/articles/13296973-hipaa-ready-enterprise-plans">「HIPAA-ready Enterprise plans」</a></li>
+        <li>個人向けプラン（Free／Pro／Max）のチャット・コーディングセッションは、利用者本人がプライバシー設定で「モデル改善への利用」を許可した場合に学習へ使用されます（会社側からの一律制御は不可）。Team／Enterprise／API などの商用プランは既定で学習に使用されません。出典: <a href="https://www.anthropic.com/news/updates-to-our-consumer-terms">Anthropic「Updates to Consumer Terms and Privacy Policy」</a>／<a href="https://privacy.claude.com/en/articles/10023580-is-my-data-used-for-model-training">Anthropic Privacy Center</a></li>
       </ul>
     </div>
 
   </div>
 </div>
+
+<script>
+(function () {
+  var STD = { year: 20, month: 25 };   // Team Standard: $/seat/month
+  var PRO = { year: 17, month: 20 };   // Pro (individual): $/seat/month
+  var MIN = 2, MAX = 150;
+
+  var num = document.getElementById('seatNum');
+  var range = document.getElementById('seatRange');
+  var seg = document.getElementById('billSeg');
+  var fx = document.getElementById('fxRate');
+
+  var seats = 7;
+  var bill = 'year';
+
+  function usd(n) { return '$' + n.toLocaleString('en-US'); }
+  function jpy(n) { return '¥' + Math.round(n).toLocaleString('en-US'); }
+  function rate() {
+    var r = parseFloat(fx.value);
+    return (isFinite(r) && r > 0) ? r : 155;
+  }
+
+  function render() {
+    var unit = STD[bill];
+    var mo = unit * seats;
+    var yr = mo * 12;
+    var r = rate();
+
+    document.getElementById('outMoUsd').innerHTML = usd(mo) + ' <small>/ 月</small>';
+    document.getElementById('outMoJpy').textContent = '≈ ' + jpy(mo * r) + ' / 月';
+    document.getElementById('outYrUsd').innerHTML = usd(yr) + ' <small>/ 年</small>';
+    document.getElementById('outYrJpy').textContent = '≈ ' + jpy(yr * r) + ' / 年';
+    document.getElementById('outSeatUsd').innerHTML = usd(unit) + ' <small>/ 席・月</small>';
+    document.getElementById('outSeatJpy').textContent = '≈ ' + jpy(unit * r) + ' / 席・月';
+
+    var saveYr = (STD.month - STD.year) * seats * 12;
+    var note = document.getElementById('calcNote');
+    if (bill === 'year') {
+      note.innerHTML = seats + ' 席を年払いで契約した場合、月払い比で年間 <b>' +
+        usd(saveYr) + '（≈ ' + jpy(saveYr * r) + '）の削減</b>となります。';
+    } else {
+      note.innerHTML = '年払いに切り替えると、' + seats +
+        ' 席で年間 <b>' + usd(saveYr) + '（≈ ' + jpy(saveYr * r) +
+        '）安く</b>なります。';
+    }
+
+    var proMo = PRO[bill] * seats;
+    var diff = mo - proMo;
+    document.getElementById('capSeats').textContent = seats;
+    document.getElementById('capPro').textContent = usd(proMo);
+    document.getElementById('capTeam').textContent = usd(mo);
+    document.getElementById('capDiff').textContent = (diff >= 0 ? '＋' : '−') + usd(Math.abs(diff));
+  }
+
+  function setSeats(v, from) {
+    v = Math.round(Number(v));
+    if (!isFinite(v)) v = MIN;
+    v = Math.min(MAX, Math.max(MIN, v));
+    seats = v;
+    if (from !== 'num') num.value = v;
+    if (from !== 'range') range.value = v;
+    render();
+  }
+
+  range.addEventListener('input', function () { setSeats(range.value, 'range'); });
+  num.addEventListener('input', function () {
+    var v = Number(num.value);
+    if (num.value !== '' && isFinite(v) && v >= MIN && v <= MAX) setSeats(v, 'num');
+  });
+  num.addEventListener('blur', function () { setSeats(num.value); });
+  document.getElementById('seatMinus').addEventListener('click', function () { setSeats(seats - 1); });
+  document.getElementById('seatPlus').addEventListener('click', function () { setSeats(seats + 1); });
+
+  seg.addEventListener('click', function (e) {
+    var btn = e.target.closest('button[data-bill]');
+    if (!btn) return;
+    bill = btn.getAttribute('data-bill');
+    Array.prototype.forEach.call(seg.querySelectorAll('button'), function (b) {
+      b.classList.toggle('on', b === btn);
+    });
+    render();
+  });
+
+  fx.addEventListener('input', render);
+  fx.addEventListener('blur', function () {
+    var r = parseFloat(fx.value);
+    if (!isFinite(r) || r <= 0) fx.value = 155;
+    render();
+  });
+
+  setSeats(7);
+})();
+</script>
